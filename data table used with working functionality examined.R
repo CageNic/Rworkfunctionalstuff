@@ -114,24 +114,3 @@ merged_data <- merged_data[date_column1 <= census_data & !is.na(date_column1)]
 
 pats_list <- data.table("rid" = merged_data$rid)
 fwrite(pats_list, file = "/pathway/filename")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
