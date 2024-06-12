@@ -5,3 +5,5 @@ ps -eo pcpu,pmem,pid,user,args|awk 'BEGIN {print "%CPU\t", "%MEMORY\t", "%USER"}
 
 # creates a better output
 ps -eo user,pmem,args | awk 'BEGIN {print "@USER\t", "%MEMORY"} {OFS="\t"} /rstudio/ && /tier/ && !/(bash|awk)/ {print $1,$2,$3} {sum_var +=$2}; END {print "\n\t\tTOTAL %MEMORY\n\t\t",sum_var};'
+
+ps aux --sort=-%mem | head
