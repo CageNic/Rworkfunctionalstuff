@@ -65,6 +65,6 @@ dbListFields(conn, 'test_table')
   )
 
 date
-
+dbClearResult(date)
 # disconnect
 dbDisconnect(conn)
