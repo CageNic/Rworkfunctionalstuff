@@ -13,6 +13,6 @@ ps -eo user,pmem,args | awk 'BEGIN {print "@USER\t", "%MEMORY"} {OFS="\t"} /rstu
 ps -eo pcpu,pmem,pid,user,args|awk 'BEGIN {print "%CPU\t", "%MEMORY", "PID\t", "%USER"} /rstudio/ && /tier/ && !/bash/ {print $1"\t", $2"\t", $3"\t", $7}'
 
 # describe the process... in this example, rsession
-ps -C rsession -eo user,pid,cmd,lstart,etime
+ps -C rsession -o user,pid,cmd,lstart,etime
 
 ps aux --sort=-%mem | head
