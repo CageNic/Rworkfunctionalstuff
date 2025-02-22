@@ -26,8 +26,8 @@ library(dplyr)
 
 data <- tibble(
   id = 1:5,
-  date_column = c("2025-02-20", "2025-02-21", "2025-02-22", "2025-02-23", "2025-02-24")
+  date_column = c("1901-02-20", "1902-02-21", "1903-02-22", "1904-02-23", "1905-02-24")
 )
 
 filtered_data <- data %>%
-  filter(as.Date(date_column) >= as.Date("2025-02-22"))
+  filter(as.Date(date_column) >= as.Date("1901-02-22"))
