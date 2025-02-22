@@ -32,6 +32,10 @@ data <- tibble(
 filtered_data <- data %>%
   filter(as.Date(date_column) >= as.Date("1901-02-22"))
 
+# data.table
+setDT(data)
+data[date_column_1 >= as.Date('1901-04-20', format = "%Y-%m-%d")]
+
 ##########################################
 # base R data.table dplyr set date class #
 ##########################################
