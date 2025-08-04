@@ -1,0 +1,5 @@
+find -newermt "mar 03, 2010" -ls
+
+find -newermt yesterday -ls
+
+find -newermt "mar 03, 2010 09:00" -not -newermt "mar 11, 2010" -ls
