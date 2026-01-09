@@ -1,0 +1,83 @@
+########################
+# working with .tar.gz #
+########################
+
+#----------------#
+# list all files #
+#----------------#
+$ ls
+
+Assets.csv  script.r  Processing-activities.csv  README.md  Vendors.csv
+
+#---------------------------#
+# create the .tar.gzip file #
+#---------------------------#
+$ tar -czf exports.tar.gz *.csv
+
+#-----------------------------------------------------------#
+# list all files including the newly created .tar.gzip file #
+#-----------------------------------------------------------#
+$ ls
+
+Assets.csv  exports.tar.gz  script.r  Processing-activities.csv  README.md  Vendors.csv
+
+#----------------------------------------#
+# list the files in compressed .tar.gzip #
+#----------------------------------------#
+$ tar -tzf exports.tar.gz
+
+Assets.csv
+Processing-activities.csv
+Vendors.csv
+
+#---------------------------------------------------------------------------------------------#
+# list the details; compression etc of the files - as a collective output - not per file      #
+# note - to do this use -l (L), but -l is not used to list the filenames in the above example #
+#---------------------------------------------------------------------------------------------#
+$ gzip -l exports.tar.gz
+
+#----------------------#
+# delete the csv files #
+#----------------------#
+$ rm *.csv
+
+#---------------------------------------------------------------#
+# search for a pattern inside one of the files of the .tar.gzip #
+# O letter not 0                                                #
+#---------------------------------------------------------------#
+$tar -xOzf exports.tar.gz Vendors.csv | grep "search_term"
+
+#---------------------------------------------------------------#
+# search for a pattern inside all of the files of the .tar.gzip #
+# O letter not 0                                                #
+#---------------------------------------------------------------#
+$tar -xOzf exports.tar.gz | grep "search_term"
+
+#------------------------------------------------------------#
+# extract single file (does not remove it from .tar.gz file) #
+#------------------------------------------------------------#
+$tar -xzf archive.tar.gz Assets.csv
+
+#-------------------#
+# extract all files #
+#-------------------#
+tar -xzf archive.tar.gz
+
+
+#############################################################
+# getting year month day included in the .tar.gzip filename #
+#############################################################
+
+tar -czf archive-$(date +%F).tar.gz file1 file2
+%F = YYYY-MM-DD
+
+# equivalent (explicit format)
+tar -czf archive-$(date +%Y-%m-%d).tar.gz file1 file2
+
+# store the date in a variable
+TODAY=$(date +%F) # or TODAY=$(date +%Y-%m-%d)
+tar -czf archive-$TODAY.tar.gz file1 file2
+
+# store all files
+TODAY=$(date +%F) # or TODAY=$(date +%Y-%m-%d)
+tar -czf archive-$TODAY.tar.gz *.csv
