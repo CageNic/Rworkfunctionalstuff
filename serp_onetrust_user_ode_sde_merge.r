@@ -97,9 +97,10 @@ onetrust <- onetrust %>%
 # Save output
 write.csv(
   combined,
-  "C:/Users/andrewc/Downloads/OneTrust/data/serp_onetrust_match.csv",
+  "C:/Users/andrewc/Downloads/OneTrust/data/serp_onetrust_user_match.csv",
   row.names = FALSE
 )
 
 rm(list = ls())
 gc()
+
