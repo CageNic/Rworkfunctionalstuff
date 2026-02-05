@@ -8,7 +8,7 @@
 library(dplyr)
 library(magrittr)
 
-Read in the SeRP SAM reports of ODE and SDE users... merge them, deduplicate them
+# read in the SeRP SAM reports of ODE and SDE users... merge them, deduplicate them
 
 # Read in the CSV files
 SDE <- read.csv("C:/Users/andrewc/Downloads/OneTrust/data/Report-SDE-All_Users-SeRP.csv", stringsAsFactors = FALSE)
@@ -103,19 +103,18 @@ onetrust <- onetrust %>%
       "present in OneTrust",
       "not present in OneTrust"
     )
-  ) %>%
-  select(-c("SDE.User.ID", "SDE.User.Access.to.SDE.Office", "SDE.User.Position",
-  "SDE.User.Employment.Basis",
-  "SDE.User.team", "SDE.User.Access.to.SDE.IT.System",
-  "SDE.Nominated.residency.date.notification"))
-
+  ) 
 # remove the serp staff from the merged data
 # base R - no library
 
 combined_clean <- combined[
   !grepl("@chi\\.swan\\.ac\\.uk$|@swansea\\.ac\\.uk|@chi\\.ac\\.uk",
   combined$`Email.SDE`,
-  ignore.case = TRUE), ]
+  ignore.case = TRUE), ] %>%
+  select(-c("SDE.User.ID", "SDE.User.Access.to.SDE.Office", "SDE.User.Position",
+  "SDE.User.Employment.Basis",
+  "SDE.User.team", "SDE.User.Access.to.SDE.IT.System", "SDE.Nominated.residency.date.notification",
+  "Username.SDE", "Email.SDE", "Organisation.SDE", "Username.ODE", "Email.ODE", "Organisation.ODE",))
 
   # those with no serp account but might have office access and therefore might be in OneTrust
   # for SDE office use
