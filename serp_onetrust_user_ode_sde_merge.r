@@ -8,29 +8,27 @@
 library(dplyr)
 library(magrittr)
 
-# read in the SeRP SAM reports of ODE and SDE users... merge them, deduplicate them
-
 # Read in the CSV files
 SDE <- read.csv("C:/Users/andrewc/Downloads/OneTrust/data/Report-SDE-All_Users-SeRP.csv", stringsAsFactors = FALSE)
 ODE <- read.csv("C:/Users/andrewc/Downloads/OneTrust/data/Report-ODE-All_Users-SeRP.csv", stringsAsFactors = FALSE)
 
-# Rename columns for fullname ---
+# Rename columns for fullname
 SDE <- SDE %>% rename(FirstName = `First.Name`, LastName = `Last.Name`)
 ODE <- ODE %>% rename(FirstName = `First.Name`, LastName = `Last.Name`)
 
-# Create fullname column ---
+# Create fullname column
 SDE <- SDE %>% mutate(serp_fullname = paste(FirstName, LastName))
 ODE <- ODE %>% mutate(serp_fullname = paste(FirstName, LastName))
 
-# Deduplicate within each file ---
+# Deduplicate within each file, some instances of same user appearing twice within SDE, or appearing twice within ODE
 SDE <- SDE %>% distinct(serp_fullname, .keep_all = TRUE)
 ODE <- ODE %>% distinct(serp_fullname, .keep_all = TRUE)
 
-# Add origin column BEFORE merging ---
+# Add origin column BEFORE merging - determins what platform user has access to
 SDE <- SDE %>% mutate(origin = "SDE")
 ODE <- ODE %>% mutate(origin = "ODE")
 
-# Merge datasets ---
+# Merge datasets
 combined <- full_join(
   SDE,
   ODE,
@@ -38,10 +36,11 @@ combined <- full_join(
   suffix = c(".SDE", ".ODE")
 )
 
-# Handle names that exist in both ---
+# Handle names that exist in both
 # If a fullname exists in both, combine origin - SDE and ODE
-# If a fullname is in neither - likely not have a serp account
-# and be office only
+# If a fullname is in neither - likely not have a serp account and be office only
+# If a fullname in ODE only - ODE
+# If a fullname in SDE only - SDE
 
 combined <- combined %>% 
   mutate(
@@ -57,7 +56,8 @@ combined <- combined %>%
 
 
 
-# make fullname case insensitive in serp report... do the same for onetrust for better match
+# make fullname case insensitive in serp report
+# do the same for onetrust for better match
 combined <- combined %>%
   mutate(serp_fullname = tolower(serp_fullname))
 
@@ -71,7 +71,7 @@ write.csv(combined, "C:/Users/andrewc/Downloads/OneTrust/data/unique_fullnames_u
 
 ####################################################################################################
 # need to check that all active SeRP entries are present in OneTrust                               #
-# netermining who is ODE, SDE, office only once established that all SeRP users appear in OneTrust #
+# determining who is ODE, SDE, office only once established that all SeRP users appear in OneTrust #
 # is probabaly a manual check in the OneTrust user report                                          #
 ####################################################################################################
 
@@ -105,7 +105,7 @@ onetrust <- onetrust %>%
     )
   ) 
 # remove the serp staff from the merged data
-# base R - no library
+# remove unwanted columns from the merged file
 
 combined_clean <- combined[
   !grepl("@chi\\.swan\\.ac\\.uk$|@swansea\\.ac\\.uk|@chi\\.ac\\.uk",
@@ -117,8 +117,6 @@ combined_clean <- combined[
   "Username.SDE", "Email.SDE", "Organisation.SDE", "Username.ODE", "Email.ODE", "Organisation.ODE",))
 
   # those with no serp account but might have office access and therefore might be in OneTrust
-  # for SDE office use
-
   # just needs a check
   combined_clean$origin[is.na(combined_clean$origin)] <- "check office access type"
 
@@ -131,3 +129,4 @@ write.csv(
 
 rm(list = ls())
 gc()
+
