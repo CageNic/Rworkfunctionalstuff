@@ -104,7 +104,7 @@ onetrust <- onetrust %>%
       "not present in OneTrust"
     )
   ) 
-# remove the serp staff from the merged data
+# remove the serp staff from the merged file
 # remove unwanted columns from the merged file
 
 combined_clean <- combined[
@@ -129,4 +129,5 @@ write.csv(
 
 rm(list = ls())
 gc()
+
 
