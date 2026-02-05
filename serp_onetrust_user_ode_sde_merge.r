@@ -114,7 +114,7 @@ combined_clean <- combined[
   select(-c("SDE.User.ID", "SDE.User.Access.to.SDE.Office", "SDE.User.Position",
   "SDE.User.Employment.Basis",
   "SDE.User.team", "SDE.User.Access.to.SDE.IT.System", "SDE.Nominated.residency.date.notification",
-  "Username.SDE", "Email.SDE", "Organisation.SDE", "Username.ODE", "Email.ODE", "Organisation.ODE",))
+  "Username.SDE", "Email.SDE", "Organisation.SDE", "Username.ODE", "Email.ODE", "Organisation.ODE", "SDE.User.Last.Completed.IS.Refresher.Date"))
 
   # those with no serp account but might have office access and therefore might be in OneTrust
   # just needs a check
@@ -129,5 +129,6 @@ write.csv(
 
 rm(list = ls())
 gc()
+
 
 
