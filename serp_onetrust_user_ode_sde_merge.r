@@ -5,9 +5,9 @@
 library(dplyr)
 library(magrittr)
 
-################################
-# Read SeRP SDE / ODE files
-################################
+#############################
+# Read SeRP SDE / ODE files # 
+#############################
 
 SDE <- read.csv(
   "C:/Users/andrewc/Downloads/OneTrust/data/Report-SDE-All_Users-SeRP.csv",
@@ -35,9 +35,9 @@ ODE <- ODE %>% distinct(serp_fullname, .keep_all = TRUE)
 SDE <- SDE %>% mutate(origin = "SDE")
 ODE <- ODE %>% mutate(origin = "ODE")
 
-################################
+#################
 # Merge SDE + ODE
-################################
+#################
 
 combined <- full_join(
   SDE,
@@ -64,12 +64,12 @@ combined <- combined %>%
 combined <- combined %>%
   mutate(serp_fullname = tolower(serp_fullname))
 
-################################
-# Read OneTrust user log
-################################
+##########################
+# Read OneTrust user log #
+##########################
 
 onetrust <- read.csv(
-  "C:/Users/andrewc/Downloads/OneTrust/data/SDE-Users-Log_2026-01-15.csv",
+  "C:/Users/andrewc/Downloads/OneTrust/data/SDE-Users-Log_2026-02-09.csv",
   stringsAsFactors = FALSE
 )
 
@@ -80,9 +80,9 @@ onetrust <- onetrust %>%
     Name_clean = Name
   )
 
-################################
-# Join SeRP users to OneTrust
-################################
+###############################
+# Join SeRP users to OneTrust #
+###############################
 
 combined <- combined %>%
   full_join(
@@ -103,9 +103,9 @@ combined <- combined %>%
     )
   )
 
-################################
-# Lock down origin for non-SeRP users
-################################
+#######################################
+# Lock down origin for non-SeRP users #
+#######################################
 
 combined <- combined %>%
   mutate(
@@ -116,15 +116,16 @@ combined <- combined %>%
     )
   )
 
-################################
-# Clean output (remove SeRP staff etc.)
-################################
+#########################################
+# clean output (remove SeRP staff etc.) #
+#########################################
+
+pattern <- "@(chi\\.ac\\.uk|chi\\.swan\\.ac\\.uk|swansea\\.ac\\.uk)$"
 
 combined_clean <- combined[
-  !grepl(
-    "@chi\\.swan\\.ac\\.uk$|@swansea\\.ac\\.uk|@chi\\.ac\\.uk",
-    combined$`Email.SDE`,
-    ignore.case = TRUE
+  !(
+    grepl(pattern, combined$Email.SDE, ignore.case = TRUE) |
+    grepl(pattern, combined$Email.ODE, ignore.case = TRUE)
   ),
 ] %>%
   select(
@@ -147,13 +148,13 @@ combined_clean <- combined[
     )
   )
 
-################################
-# Save output
-################################
+################
+# write output #
+################
 
 write.csv(
   combined_clean,
-  "C:/Users/andrewc/Downloads/OneTrust/data/serp_onetrust_user_match.csv",
+  paste0("C:/Users/andrewc/Downloads/OneTrust/data/serp_onetrust_user_match_", Sys.Date(), ".csv"),
   row.names = FALSE
 )
 
